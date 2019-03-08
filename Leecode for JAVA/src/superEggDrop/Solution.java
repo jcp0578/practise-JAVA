@@ -7,15 +7,27 @@ package superEggDrop;
  * 动态规划
  * 
  * 
+  * superEggDrop
+  * 利用鸡蛋个数思考
+  * F(K,STEP)=F(K,STEP-1)+F(K-1,STEP-1))+1;
+  * AC 9ms
+  * 
+  * 
+ * superEggDrop2
+ * 利用楼层思考
+ * F(K,N)=max(F(k,N1),F(k-1,N-N1))+1;
  * AC but out time
  * 
  */
 public class Solution {
-//	public static int superEggDrop(int K, int N) {
-//	
-//	
-//	}
-	// AC but out time
+	
+	 /* 
+	  * 
+	  * superEggDrop
+	  * 利用鸡蛋个数思考
+	  * F(K,STEP)=F(K,STEP-1)+F(K-1,STEP-1))+1;
+	  * AC 9ms
+	  */
 	public static int superEggDrop(int K, int N) {
 		if (N <= 0)
 			return 0;
@@ -26,6 +38,63 @@ public class Solution {
 		if (K <= 1)
 			return N;
 
+		if(K>=14)
+		{
+			int out_t=1;
+			int temp=N;
+			for(out_t=0;temp>0;out_t++)
+			{
+				temp=temp>>1;
+			}
+			return out_t;
+		}
+		
+		int[] temp_K=new int[K];
+		int out_t=1;
+		for(;;)
+		{
+			int last_val=0;
+			for(int i=0;i<K;i++)
+			{
+				int temp=temp_K[i];
+				temp_K[i]=temp_K[i]+last_val+1;
+				last_val=temp;
+				if(temp_K[i]>=N)
+					return out_t;
+			}
+			out_t++;
+		}
+	
+	}
+	
+	 /* 
+	  * 
+	  * superEggDrop2
+	  * 利用楼层思考
+	  * F(K,N)=max(F(k,N1),F(k-1,N-N1))+1;
+	  * AC but out time
+	  */
+	public static int superEggDrop2(int K, int N) {
+		if (N <= 0)
+			return 0;
+		else if (N == 1)
+			return 1;
+		else if (N == 2)
+			return 2;
+		if (K <= 1)
+			return N;
+
+		
+		if(K>=14)
+		{
+			int out_t=1;
+			int temp=N;
+			for(out_t=0;temp>0;out_t++)
+			{
+				temp=temp>>1;
+			}
+			return out_t;
+		}
 		int[] last_temp = new int[N];
 		for (int i = 0; i < N; i++)
 			last_temp[i] = i + 1;
@@ -69,18 +138,18 @@ public class Solution {
 
 	public static void main(String[] args) {
 		// TODO 自动生成的方法存根
-//		System.out.println(superEggDrop(6, 6));// 3
-//		System.out.println(superEggDrop(2, 6));// 3
-//		System.out.println(superEggDrop(1,6));//6
-//		System.out.println(superEggDrop(1,2));//2
-//		System.out.println(superEggDrop(2,2));//2
-//		System.out.println(superEggDrop(3,14));//4
-//		System.out.println(superEggDrop(2,4));//3
-//		System.out.println(superEggDrop(0,6));//6
-//		System.out.println(superEggDrop(2,9));//4
-//		System.out.println(superEggDrop(2, 7));// 4
-//		System.out.println(superEggDrop(2, 11));// 5
-		System.out.println(superEggDrop(100, 100));
+		System.out.println(superEggDrop(6, 6));// 3
+		System.out.println(superEggDrop(2, 6));// 3
+		System.out.println(superEggDrop(1,6));//6
+		System.out.println(superEggDrop(1,2));//2
+		System.out.println(superEggDrop(2,2));//2
+		System.out.println(superEggDrop(3,14));//4
+		System.out.println(superEggDrop(2,4));//3
+		System.out.println(superEggDrop(0,6));//6
+		System.out.println(superEggDrop(2,9));//4
+		System.out.println(superEggDrop(2, 7));// 4
+		System.out.println(superEggDrop(2, 11));// 5
+		System.out.println(superEggDrop(2, 100));
 		System.out.println(superEggDrop(100, 8192));
 		System.out.println(superEggDrop(100, 10000));
 	}
