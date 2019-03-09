@@ -7,50 +7,32 @@ import java.util.HashMap;
  * https://leetcode-cn.com/explore/interview/card/top-interview-quesitons-in-2018/272/dynamic-programming/1176/
  * 
  * 利用hashMap创建索引
+ * 简化代码
  * AC but too slow
  */
 public class Solution {
     public static int longestConsecutive(int[] nums) {
-        int len=nums.length;
-        if(len<=1)
-        	return len;
+        if(nums.length<=1)
+        	return nums.length;
     	HashMap<Integer,Integer> count=new HashMap<>();
         for(int num:nums)
         {
         	if(count.get(num)!=null)
         		continue;
-        	Integer left_t=count.get(num+1);
-        	Integer right_t=count.get(num-1);
-        	if(left_t ==null && right_t==null)
-        		count.put(num, 0);
-        	else if((left_t==null ||left_t<0) && right_t!=null && right_t<=0 )//可扩展右边
-        	{
-        		count.put(num, right_t-1);
-        		count.put(num+right_t-1, -right_t+1);
-        	}
-        	else if((right_t==null||right_t>0) && left_t!=null && left_t>=0)//可扩展左边
-        	{
-        		count.put(num, left_t+1);
-        		count.put(num+left_t+1, -left_t-1);        		
-        	}
-        	else if(right_t!=null && left_t!=null)//两边都扩展
-        	{
-        		if(right_t<=0 && left_t>=0)
-        		{
-        			count.put(num, 0);
-            		count.put(num+right_t-1, -right_t+left_t+2);
-            		count.put(num+left_t+1, -left_t+right_t-2);
-        		}
- 
-        	}
+        	Integer left_t=count.getOrDefault(num-1,0);
+        	Integer right_t=count.getOrDefault(num+1,0);
+        	int len=left_t+right_t+1;
+        	count.put(num, len);
+        	count.put(num-left_t, len);
+        	count.put(num+right_t, len);
         }
-        Integer out_t=-1;
+        Integer out_t=0;
         for(Integer temp:count.values())
         {
-        	if(Math.abs(temp)>out_t)
+        	if(temp>out_t)
         		out_t=temp;
         }
-        return out_t+1;
+        return out_t;
     }
 	public static void main(String[] args) {
 		// TODO 自动生成的方法存根
