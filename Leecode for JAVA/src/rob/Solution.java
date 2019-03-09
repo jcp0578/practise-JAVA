@@ -6,7 +6,7 @@ package rob;
  * F(n)=max(F(n-1),p(n)+F(n-2))
  * 
  * AC 6ms
- * 
+ * 时间复杂度O(N)  空间复杂度O(1),但是修改了原数据，不修改原数据，则空间复杂度O(N)
  */
 public class Solution {
     public static int rob(int[] nums) {
