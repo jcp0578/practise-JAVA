@@ -8,7 +8,6 @@ import java.util.Scanner;
  */
 public class Solution {
 	public static void main(String[] args) {
-		// TODO 自动生成的方法存根
 		Scanner readScanner = new Scanner(System.in);
 		while (readScanner.hasNextLine()) {
 			int n = readScanner.nextInt();
