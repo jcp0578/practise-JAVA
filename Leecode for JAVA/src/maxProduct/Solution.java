@@ -5,9 +5,9 @@ package maxProduct;
  * 乘积最大子序列
  * https://leetcode-cn.com/explore/interview/card/top-interview-quesitons-in-2018/264/array/1126/
  * 
- * 穷举
- * 时间复杂度O(N^2)  空间复杂度O(N)
- * AC but too slow
+ * 记录之前的最大值，最小值
+ * 时间复杂度O(N)  空间复杂度(1)
+ * AC 3ms
  * 
  */
 class Solution {
@@ -17,22 +17,29 @@ class Solution {
         	return 0;
         else if(len==1)
         	return nums[0];
-        int[] max_temp=new int[len];
-        for(int i=0;i<len;i++)
-        	max_temp[i]=nums[i];
         
-        for(int i=0;i<len;i++)
-        {
-        	int Product_t=1;
-        	for(int j=i;j<len;j++)
-        	{
-        		Product_t*=nums[j];
-        		max_temp[j]=Math.max(Product_t, max_temp[j]);
-        	}
-        }
-        int out_t=max_temp[0];
+        int max_temp=nums[0],min_temp=nums[0];
+        int out_t=nums[0];
         for(int i=1;i<len;i++)
-        	out_t=Math.max(max_temp[i], out_t);
+        {
+        	int max_t=max_temp,min_t=min_temp;
+        	if(nums[i]==0)
+        	{
+        		max_temp=0;
+        		min_temp=0;
+        	}
+        	else if(nums[i] >0)
+        	{
+        		max_temp=Math.max(max_t*nums[i], nums[i]);
+        		min_temp=Math.min(min_t*nums[i], nums[i]);
+        	}
+        	else
+        	{
+        		max_temp=Math.max(min_t*nums[i], nums[i]);
+        		min_temp=Math.min(max_t*nums[i], nums[i]);        		
+        	}
+        	out_t=Math.max(out_t, max_temp);
+        }
         return out_t;
     }
 	public static void main(String[] args) {
