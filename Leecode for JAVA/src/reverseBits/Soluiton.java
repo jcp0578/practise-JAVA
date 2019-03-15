@@ -4,7 +4,7 @@ package reverseBits;
  *  
  * AC 
  */
-public class Soluiton {
+public class Solution {
     // you need treat n as an unsigned value
     public int reverseBits(int n) {
         int res=Integer.reverse(n);
@@ -23,7 +23,7 @@ public class Soluiton {
 	public static void main(String[] args) {
 		// TODO 自动生成的方法存根
 		int num_in1 = 1;
-		Soluiton test = new Soluiton();
+		Solution test = new Solution();
 		System.out.println(test.reverseBits(num_in1));
 	}
 
