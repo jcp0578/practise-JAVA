@@ -1,11 +1,13 @@
 package fractionToDecimal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /*
- *  分数到小数
+   *  分数到小数
  * 
- * AC but too slow
+   *  先处理整数部分，将小数部分的被除数放入HashMap中检查
+ * AC 
  */
 public class Solution {
 	public String fractionToDecimal(int numerator, int denominator) {
@@ -31,14 +33,15 @@ public class Solution {
 		}
 		if (numerator_t != 0) {
 			out_t.append('.');
-			ArrayList<Long> dividend = new ArrayList<Long>();
+			HashMap<Long,Integer> dividend = new HashMap<>();
 			ArrayList<Long> res = new ArrayList<Long>();
+			int index=0;
 			while (numerator_t != 0) {
-				dividend.add(numerator_t);
+				dividend.put(numerator_t,index++);
 				long temp =  (numerator_t * 10 / denominator_t);
 				numerator_t = numerator_t * 10 - denominator_t * temp;
 				res.add(temp);
-				if (dividend.indexOf(numerator_t) != -1) {
+				if (dividend.get(numerator_t)!= null) {
 					break;
 				}
 			}
@@ -47,7 +50,7 @@ public class Solution {
 					out_t.append(t);
 				}
 			} else {
-				int back_index = dividend.indexOf(numerator_t);
+				int back_index = dividend.get(numerator_t);
 				for (int i = 0; i < back_index; i++) {
 					out_t.append(res.get(i));
 				}
