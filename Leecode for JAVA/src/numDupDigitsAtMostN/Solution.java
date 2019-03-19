@@ -2,8 +2,9 @@ package numDupDigitsAtMostN;
 
 
 /**
- * 
- * ERROR
+ * 1015. 至少有 1 位重复的数字
+ * https://leetcode-cn.com/problems/numbers-with-repeated-digits/submissions/
+ * AC but too slow
  * @author JCP
  *
  */
@@ -13,11 +14,11 @@ public class Solution {
     	find_N=N;
     	return N+1-numBoDupDigit(0,0);
     }
-	private int numBoDupDigit(int mask, int num) {
+	private int numBoDupDigit(int mask, long num) {
 		if(num>find_N)
 			return 0;
 		int out=1;
-		for(int i=((num==0)?1:0);i<10;i++)
+		for(long i=((num==0)?1:0);i<10;i++)
 		{
 			if(((mask>>i)&1)==0)
 			{
