@@ -1,13 +1,11 @@
 package findOrder;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Stack;
 
 /**
  * 课程表 2
- * 构建邻接表后，DSP 遍历 利用visit_flag进行判断与剪枝,将结果保存于stack中
- * AC 14ms-84.77%
+ * 构建邻接表后，DSP 遍历 利用visit_flag进行判断与剪枝,将结果保存于ArrayList中(效率好于Stack)
+ * AC 11ms-90.95%
  * 
  * @author JCP
  *
@@ -21,34 +19,34 @@ public class Solution {
 
 		int len = prerequisites.length;
 		for (int i = 0; i < len; i++)
-			node_path[prerequisites[i][1]].add(prerequisites[i][0]);
+			node_path[prerequisites[i][0]].add(prerequisites[i][1]);
 
 		int[] visit_flag = new int[numCourses];
 		//@1 正在访问  @-1无问题
-		Stack<Integer> out_stack=new Stack<>();
+		ArrayList<Integer> out_t = new ArrayList<>();
 		
 		for (int i = 0; i < numCourses; i++) {
-			if (dsp(node_path, i,visit_flag,out_stack) == false)
+			if (dsp(node_path, i,visit_flag,out_t) == false)
 				return new int[0];
 		}
 		int[] out=new int[numCourses];
 		for(int i=0;i<numCourses;i++)
-			out[i]=out_stack.pop();
+			out[i]=out_t.get(i);
 		return out;
 	}
 
-	private boolean dsp(ArrayList<Integer>[] node_path, int node, int[] visit_flag, Stack<Integer> out_stack) {
+	private boolean dsp(ArrayList<Integer>[] node_path, int node, int[] visit_flag, ArrayList<Integer> out_t) {
 		if (visit_flag[node] == -1)// 已访问过，无问题
 			return true;
 		if (visit_flag[node] == 1)  //重复访问
 			return false;
 		visit_flag[node]=1;
 		for (Integer temp_node : node_path[node]) {
-			if (dsp(node_path, temp_node, visit_flag,out_stack) == false)
+			if (dsp(node_path, temp_node, visit_flag,out_t) == false)
 				return false;
 		}
 		visit_flag[node]=-1;
-		out_stack.push(node);
+		out_t.add(node);
 		return true;
 	}
 
