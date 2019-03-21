@@ -6,31 +6,46 @@ import java.util.List;
 /*
  * 
  * 单词拆分
+ * DP
  * 
- * out time
+ * AC but slow
+ * 23ms 23.08%
  * 
  */
 public class Solution {
-    String _str;
-    List<String> _dict;
+	String _str;
+	List<String> _dict;
 	public boolean wordBreak(String s, List<String> wordDict) {
 		this._str=s;
 		this._dict=wordDict;
-    	return check(0);
-        
+		int len=s.length();
+		boolean[] flag=new boolean[len+1];
+		flag[0]=true;
+		for(int i=1;i<=len;i++)
+		{
+			for(int j=0;j<=i;j++)
+			{
+				if(flag[j])
+				{
+					if(check(j,i))
+						flag[i]=true;
+				}
+			}
+		}
+    	return flag[len];
     }
-	private boolean check(int start) {
-		if(start==_str.length())
-			return true;
-		boolean right_flag=false;
+	private boolean check(int start,int end) {
+		if(start>=end)
+			return false;
 		for(String t:_dict)
 		{
 			int i=0;
 			int t_len=t.length();
-			if((_str.length()-start)<t_len)
+			if((end-start)!=t_len)
 				continue;
 			for(i=0;i<t_len;i++)
 			{
+
 				if(t.charAt(i)!=_str.charAt(start+i))
 				{
 					break;
@@ -38,20 +53,25 @@ public class Solution {
 			}
 			if(i==t_len)
 			{
-				if(check(start+t_len))
-					right_flag=true;
+				return true;
 			}
 		}
-		return right_flag;
+		return false;
 	}
 	public static void main(String[] args) {
-		String test_in="bb";
+		String test_in="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab";
 		List<String> wordDict_t=new ArrayList<>();
-		wordDict_t.add("bbb");
-		wordDict_t.add("dog");
-		wordDict_t.add("sand");
-		wordDict_t.add("cat");
-		wordDict_t.add("code");
+		wordDict_t.add("a");
+		wordDict_t.add("aa");
+		wordDict_t.add("aaa");
+		wordDict_t.add("aaaa");
+		wordDict_t.add("aaaaa");
+		wordDict_t.add("aaaaaa");
+		wordDict_t.add("aaaaaaa");
+		wordDict_t.add("aaaaaaaa");
+		wordDict_t.add("aaaaaaaaa");
+		wordDict_t.add("aaaaaaaaaa");
+		wordDict_t.add("aaaaaaaaaaa");
 		Solution test=new Solution();
 		System.out.println(test.wordBreak(test_in, wordDict_t));
 
