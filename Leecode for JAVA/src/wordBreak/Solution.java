@@ -7,9 +7,9 @@ import java.util.List;
  * 
  * 单词拆分
  * DP
- * 
+ * 加入对字典最长的判断优化
  * AC but slow
- * 23ms 23.08%
+ * 14ms 62.56%
  * 
  */
 public class Solution {
@@ -21,9 +21,16 @@ public class Solution {
 		int len=s.length();
 		boolean[] flag=new boolean[len+1];
 		flag[0]=true;
+		
+		int word_len_max=0;
+		for(String t:_dict)
+		{
+			word_len_max=Math.max(word_len_max, t.length());
+		}
+		
 		for(int i=1;i<=len;i++)
 		{
-			for(int j=0;j<=i;j++)
+			for(int j=Math.max(0, i-word_len_max);j<i;j++)
 			{
 				if(flag[j])
 				{
