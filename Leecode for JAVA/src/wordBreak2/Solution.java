@@ -17,6 +17,7 @@ public class Solution {
     String _str;
     List<String> _dict;
     List<String> out;
+    boolean[] flag;
     public List<String> wordBreak(String s, List<String> wordDict) {
 		this._str=s;
 		this._dict=wordDict;
@@ -24,7 +25,7 @@ public class Solution {
 		ArrayList<String> add_t=new ArrayList<>();
 		
 		int len=s.length();
-		boolean[] flag=new boolean[len+1];
+		flag=new boolean[len+1];
 		flag[0]=true;
 		
 		int word_len_max=0;
@@ -95,11 +96,16 @@ public class Solution {
 		}
 		else
 		{
+			if(flag[start]!=true)
+				return ;
+			//TODO 利用flag优化,时间反而增加至38ms
 			for(String t:_dict)
 			{
 				int i=0;
 				int t_len=t.length();
 				if((_str.length()-start)<t_len)
+					continue;
+				if(flag[start+t_len]!=true)
 					continue;
 				for(i=0;i<t_len;i++)
 				{
@@ -120,8 +126,6 @@ public class Solution {
 	public static void main(String[] args) {
 		String test_in="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 		List<String> wordDict_t=new ArrayList<>();
-		wordDict_t.add("a");
-		wordDict_t.add("aa");
 		wordDict_t.add("aaa");
 		wordDict_t.add("aaaa");
 		wordDict_t.add("aaaaa");
