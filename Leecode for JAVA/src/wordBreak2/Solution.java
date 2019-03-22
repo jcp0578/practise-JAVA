@@ -126,6 +126,8 @@ public class Solution {
 	public static void main(String[] args) {
 		String test_in="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 		List<String> wordDict_t=new ArrayList<>();
+		wordDict_t.add("a");
+		wordDict_t.add("aa");
 		wordDict_t.add("aaa");
 		wordDict_t.add("aaaa");
 		wordDict_t.add("aaaaa");

@@ -7,7 +7,7 @@ package reConstructBinaryTree;
 public class Solution {
 	int[] pre_g,in_g;
 	int root_index=0;
-	public TreeNode reConstructBinaryTree(int[] pre, int[] in) {
+	public static TreeNode reConstructBinaryTree(int[] pre, int[] in) {
 		int len=pre.length;
 		if(len==0)
 			return null;
