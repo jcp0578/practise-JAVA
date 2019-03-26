@@ -3,8 +3,9 @@ package MedianFinder;
 /*
  * 数据流的中位数
  * 二叉搜索树
+ * 还可以采用维护最小堆和最大堆的size相同的方法
  * AC but slow
- * 261ms - 51.91%
+ * 236ms - 64.48%
  */
 public class MedianFinder {
 	int len;
@@ -42,31 +43,26 @@ public class MedianFinder {
 				addNode(num, node.right);
 			}
 		}
-
 	}
 
 	public double findMedian() {
 		if ((len & 1) != 0) {
-			return (double) findTree((len + 1) / 2, this.root, 0, 0);
+			return (double) findTree((len + 1) / 2, this.root);
 		} else {
-			return (findTree(len / 2, this.root, 0, 0) + findTree(len / 2 + 1, this.root, 0, 0)) / 2.0;
+			return (findTree(len / 2, this.root) + findTree(len / 2 + 1, this.root)) / 2.0;
 		}
 
 	}
 
-	private int findTree(int k, TreeNode node, int small_num, int big_num) {
-		small_num += node.small_nums;
-		big_num += node.big_nums;
-		if (k <= small_num)// 查找的数小于当前值
+	private int findTree(int k, TreeNode node) {
+		if (k <= node.small_nums)// 查找的数小于当前值
 		{
-			small_num -= node.small_nums;
-			return findTree(k, node.left, small_num, big_num + node.same_nums);
-		} else if (k <= small_num + node.same_nums)// 为当前值
+			return findTree(k, node.left);
+		} else if (k <= node.small_nums + node.same_nums)// 为当前值
 		{
 			return node.val;
 		} else {
-			big_num -= node.big_nums;
-			return findTree(k, node.right, small_num + node.same_nums, big_num);
+			return findTree(k-node.small_nums-node.same_nums, node.right);
 		}
 	}
 
@@ -121,9 +117,5 @@ class TreeNode {
 	TreeNode(int v) {
 		this.val = v;
 		this.same_nums = 1;
-		this.big_nums = 0;
-		this.small_nums = 0;
-		this.left = null;
-		this.right = null;
 	}
 }
