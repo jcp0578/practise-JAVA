@@ -3,7 +3,7 @@ package findMaxConsecutiveOnes;
 /*
  * 最大连续1的个数
  * 
- * AC but slow
+ * AC
  * 8ms - 68.65%
  */
 public class Solution {
