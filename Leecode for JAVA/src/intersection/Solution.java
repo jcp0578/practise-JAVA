@@ -3,10 +3,11 @@ package intersection;
 /*
  * 两个数组的交集
  * AC but slow
- * 14ms - 25.08%
+ * 8ms - 52.24%
  * 
  */
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.TreeSet;
@@ -16,41 +17,24 @@ public class Solution {
     	if(nums1==null || nums1.length==0)
     		return new int[0];
     	if(nums2==null || nums2.length==0)
-    		return new int[0];    	
+    		return new int[0]; 
+    	if(nums1.length>nums2.length)
+    	{
+    		int[] temp=nums1;
+    		nums1=nums2;
+    		nums2=temp;
+    	}
         ArrayList<Integer> out=new ArrayList<>();
-        TreeSet<Integer> set1=new TreeSet<Integer>();
+        HashSet<Integer> set=new HashSet<Integer>();
         for(int t:nums1)
-        	set1.add(t);
-        TreeSet<Integer> set2=new TreeSet<Integer>();
+        	set.add(t);
         for(int t:nums2)
-        	set2.add(t);
-        Iterator<Integer> set1_iterator = set1.iterator();
-        Iterator<Integer> set2_iterator = set2.iterator();
-        Integer t1=new Integer(set1_iterator.next());
-        Integer t2=new Integer(set2_iterator.next());
-        while(true)
-        {	
-            try 
-            {
-            	if(t1.equals(t2))
-            	{
-            		out.add(t1);
-            		t1=set1_iterator.next();
-            		t2=set2_iterator.next();
-            	}
-            	else if(t1>t2)
-            	{
-            		t2=set2_iterator.next();
-            	}
-            	else
-            	{
-            		t1=set1_iterator.next();
-            	}            	
-            }
-            catch(NoSuchElementException e)
-            {
-            	break;
-            }       	
+        {
+        	if(set.contains(t))
+        	{
+        		out.add(t);
+        		set.remove(t);
+        	}
         }
         int[] ret=new int[out.size()];
         for(int i=0;i<out.size();i++)
