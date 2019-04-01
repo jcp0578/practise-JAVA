@@ -2,54 +2,54 @@ package isInterleave;
 
 /*
  * 交错字符串
- * 递归
- * out time
+ * dp
+ * AC
  * 
  */
 public class Solution {
-	String _s1;
-	String _s2;
-	String _s3;
 
 	public boolean isInterleave(String s1, String s2, String s3) {
-		if (s3.length() != (s1.length() + s2.length()))
+		int len1 = s1.length();
+		int len2 = s2.length();
+		int len3 = s3.length();
+		if (len3 != (len1 + len2))
 			return false;
-		this._s1 = s1;
-		this._s2 = s2;
-		this._s3 = s3;
 
-		int s1_i = 0, s2_i = 0, s3_i = 0;
+		int[][] dp = new int[len1 + 1][len2 + 1];
+		dp[0][0] = 1;
 
-		return find(s1_i, s2_i, s3_i);
-
-	}
-
-	private boolean find(int s1_i, int s2_i, int s3_i) {
-		if (s3_i == this._s3.length())
-			return true;
-		if (s1_i == this._s1.length()) {
-			return this._s3.substring(s3_i).equals(this._s2.substring(s2_i));
+		for (int i = 1; i < len1 + 1; i++) {
+			if (s1.charAt(i - 1) == s3.charAt(i - 1))
+				dp[i][0] = 1;
+			else
+				break;
 		}
-		if (s2_i == this._s2.length()) {
-			return this._s3.substring(s3_i).equals(this._s1.substring(s1_i));
+		for (int j = 1; j < len2 + 1; j++) {
+			if (s2.charAt(j - 1) == s3.charAt(j - 1))
+				dp[0][j] = 1;
+			else
+				break;
 		}
-		if (this._s1.charAt(s1_i) == this._s2.charAt(s2_i)) {
-			if (this._s1.charAt(s1_i) == this._s3.charAt(s3_i)) {
-				return (this.find(s1_i + 1, s2_i, s3_i + 1) | this.find(s1_i, s2_i + 1, s3_i + 1));
-			} else
-				return false;
-		} else if (this._s1.charAt(s1_i) == this._s3.charAt(s3_i)) {
-			return this.find(s1_i + 1, s2_i, s3_i + 1);
-		} else if (this._s2.charAt(s2_i) == this._s3.charAt(s3_i)) {
-			return this.find(s1_i, s2_i + 1, s3_i + 1);
-		} else
-			return false;
+
+		for (int i = 1; i < len1 + 1; i++) {
+			for (int j = 1; j < len2 + 1; j++) {
+				if (dp[i - 1][j] == 1) {
+					if (s1.charAt(i - 1) == s3.charAt(i + j - 1))
+						dp[i][j] = 1;
+				}
+				if (dp[i][j - 1] == 1) {
+					if (s2.charAt(j - 1) == s3.charAt(i + j - 1))
+						dp[i][j] = 1;
+				}
+			}
+		}
+		return (dp[len1][len2] == 1);
 	}
 
 	public static void main(String[] args) {
 		String s1 = "aabcc";
 		String s2 = "dbbca";
-		String s3 = "aadbbbaccc";
+		String s3 = "aadbbcbcac";
 		Solution test = new Solution();
 		System.out.println(test.isInterleave(s1, s2, s3));
 
