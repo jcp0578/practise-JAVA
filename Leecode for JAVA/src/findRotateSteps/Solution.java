@@ -1,8 +1,11 @@
 package findRotateSteps;
 
+import java.util.ArrayList;
+
 /*
  * 自由之路
- * 遍历法
+ * 遍历法 
+ * 加入二分搜索查找
  *  out time
  */
 public class Solution {
@@ -11,6 +14,7 @@ public class Solution {
 	int ring_len;
 	int key_len;
 	int out;
+	ArrayList<ArrayList<Integer>> _index;
 
 	public int findRotateSteps(String ring, String key) {
 		if (ring == null || key == null)
@@ -21,6 +25,14 @@ public class Solution {
 		this.ring_len = ring.length();
 		this._ring = ring;
 		this._key = key;
+
+		this._index = new ArrayList<ArrayList<Integer>>();
+		for (int i = 0; i < 26; i++)
+			this._index.add(new ArrayList<Integer>());
+		for (int i = 0; i < this.ring_len; i++) {
+			this._index.get(ring.charAt(i) - 'a').add(i);
+		}
+
 		this.out = Integer.MAX_VALUE;
 		find(0, 0, 0);
 		return this.out;
@@ -40,18 +52,19 @@ public class Solution {
 		int left_step = 0;
 		int right_step = 0;
 
-		while (this._ring.charAt(left) != this._key.charAt(key_index)) {
-			left--;
-			left_step++;
-			if (left < 0)
-				left = this.ring_len - 1;
-		}
-		while (this._ring.charAt(right) != this._key.charAt(key_index)) {
-			right++;
-			right_step++;
-			if (right >= this.ring_len)
-				right = 0;
-		}
+		left = find_index(ring_index, this._key.charAt(key_index), 0);
+		if (left <= ring_index)
+			left_step = ring_index - left;
+		else
+			left_step is.ring_len - left + ring_index;
+
+		right = find_index(ring_index, this._key.charAt(key_index), 1);
+
+		if (right >= ring_index)
+			right_step = right - ring_index;
+		else
+			right_step = this.ring_len - ring_index + right;
+
 		if (left == right) {
 			find(left, key_index + 1, count + Math.min(left_step, right_step) + 1);
 		} else {
@@ -59,12 +72,59 @@ public class Solution {
 			find(right, key_index + 1, count + right_step + 1);
 		}
 
-			
+	}
+
+	private int find_index(int ring_index, char ch, int mode) {
+		ArrayList<Integer> list = this._index.get(ch - 'a');
+		int len = list.size();
+		if (len == 0)
+			return -1;
+		else if (len == 1)
+			return list.get(0);
+		if (mode == 0) {
+			if (ring_index < list.get(0))
+				return list.get(len - 1);
+			else if (ring_index > list.get(len - 1))
+				return list.get(len - 1);
+			else {
+				int l = 0;
+				int r = len - 1;
+				int mid;
+				while (l < r) {
+					mid = (l + r + 1) >> 1;
+					if (list.get(mid) > ring_index) {
+						r = mid - 1;
+					} else {
+						l = mid;
+					}
+				}
+				return list.get(l);
+			}
+		} else {
+			if (ring_index < list.get(0))
+				return list.get(0);
+			else if (ring_index > list.get(len - 1))
+				return list.get(0);
+			else {
+				int l = 0;
+				int r = len - 1;
+				int mid;
+				while (l < r) {
+					mid = (l + r) >> 1;
+					if (list.get(mid) < ring_index) {
+						l = mid + 1;
+					} else {
+						r = mid;
+					}
+				}
+				return list.get(r);
+			}
+		}
 	}
 
 	public static void main(String[] args) {
 		String test_ring = "bicligfijg";
-		String test_key = "cgijcjlgiggigigijiiciicjilicjflccgilcflijgigbiifiggigiggibbjbijlbcifjlblfggiibjgblgfiiifgbiiciffgbfl";
+		String test_key = "j";//"cgijcjlgiggigigijiiciicjilicjflccgilcflijgigbiifiggigiggibbjbijlbcifjlblfggiibjgblgfiiifgbiiciffgbfl";
 		Solution test = new Solution();
 		System.out.println(test.findRotateSteps(test_ring, test_key));
 
