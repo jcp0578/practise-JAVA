@@ -12,7 +12,7 @@ package orderlyQueue;
 
 public class Solution {
 	public String orderlyQueue(String S, int K) {
-		if (S == null || k <= 0)
+		if (S == null || K <= 0)
 			return S;
 		int len = S.length();
 		if (len <= 1)
