@@ -8,30 +8,28 @@ package zigzagLevelOrder;
  * 2ms - 83.52%
  */
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import util.TreeNode;
 
 public class Solution {
-    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-        List<List<Integer>> res=new ArrayList<List<Integer>>();
-        res.add(new ArrayList<Integer>());
-        Order(res,root,0);
-        for(int i=1;i<res.size();i+=2)
-        {
-        	Collections.reverse(res.get(i));
-        }
-        return res;
-    }
+	public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+		List<List<Integer>> res = new ArrayList<List<Integer>>();
+		Order(res, root, 0);
+		return res;
+	}
 
 	private void Order(List<List<Integer>> res, TreeNode node, int k) {
-		if(node==null)
+		if (node == null)
 			return;
-		if(k>=res.size())
+		if (k >= res.size())
 			res.add(new ArrayList<Integer>());
-		res.get(k).add(node.val);
-		Order(res,node.left,k+1);
-		Order(res,node.right,k+1);
+		if (k % 2 == 0)
+			res.get(k).add(node.val);
+		else
+			res.get(k).add(0, node.val);
+
+		Order(res, node.left, k + 1);
+		Order(res, node.right, k + 1);
 	}
 }
