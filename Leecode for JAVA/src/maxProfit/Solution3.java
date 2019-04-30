@@ -3,11 +3,12 @@ package maxProfit;
 /*
  * 最佳买卖股票时机含冷冻期
  * DP
- * dp[i]表示从第i天开始的最大利润
- * dp[i]=max{profit+dp[k+2]} (k在可获取利润的范围内)
+ * dp[i][0];//第i天买入的利润
+   dp[i][1];//第i天卖出的利润
+   dp[i][2];//第i天为冷冻期的利润
  * 
- * AC but slow
- * 45ms - 7.54%
+ * AC
+ * 3ms - 87.72%
  * 
  */
 public class Solution3 {
@@ -16,30 +17,19 @@ public class Solution3 {
 		if (prices == null)
 			return 0;
 		int len = prices.length;
-		int[] dp = new int[len];
-		return deal(prices, dp, 0);
-	}
-
-	private int deal(int[] prices, int[] dp, int i) {
-		if (i >= prices.length)
+		if(len==0)
 			return 0;
-		if (dp[i] != 0)
-			return (dp[i] == -1) ? 0 : dp[i];
-		int out = 0;
-		int buy = -1;
-		for (int k = i; k < prices.length; k++) {
-			if (buy == -1 || prices[k] <= buy) {
-				buy = prices[k];
-			} 
-			int profit = prices[k] - buy;
-			profit += deal(prices, dp, k + 2);
-			if (profit > out)
-				out = profit;
-		}
-		dp[i] = out;
-		return out;
+		int[][] dp = new int[len][3];
+        dp[0][0]=-prices[0];//买入
+        dp[0][1]=0;//卖出
+        dp[0][2]=0;//冷冻期		
+        for(int i=1;i<len;i++){
+            dp[i][0]=Math.max(dp[i-1][2]-prices[i],dp[i-1][0]);
+            dp[i][1]=dp[i-1][0]+prices[i];
+            dp[i][2]=Math.max(dp[i-1][1],dp[i-1][2]);
+        }
+        return Math.max(dp[len-1][1],dp[len-1][2]);
 	}
-
 	public static void main(String[] args) {
 		// TODO 自动生成的方法存根
 		int[] test_in = { 
