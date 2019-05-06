@@ -2,87 +2,60 @@ package isMatch;
 
 /*
  * 通配符匹配
- * out time
- * 1708/1808
+ * DP
+ * dp[x][y]表示s[0...x-1]能否被p[0...y-1]匹配
  * 
+ * 参考题解:https://blog.csdn.net/qq_41231926/article/details/82732623
+ * 
+ * AC
+ * 47ms - 61.02%
  */
 public class Solution {
 	public boolean isMatch(String s, String p) {
-		return isMatch(s, p, 0, 0);
-	}
-
-	private boolean isMatch(String s, String p, int i, int j) {
-		int nums=0;
-		for(int k=j;k<p.length();k++)
-		{
-			if(p.charAt(k)=='*')
-				nums++;
+		if (p == null) {
+			if (s == null)
+				return true;
+			else
+				return false;
 		}
-		if((s.length()-i)<(p.length()-j-nums))
-			return false;
-		
-		if (i >= s.length() || j >= p.length()) {
-			if (i == s.length())
-			{
-				int next_char_index=j;
-				while (next_char_index < p.length() && p.charAt(next_char_index) == '*')
-					next_char_index++;
-				if(next_char_index==p.length())
-					return true;
-				else
+		if (s == null) {
+			for (int i = 0; i < p.length(); i++) {
+				if (p.charAt(i) != '*')
 					return false;
 			}
-			else
-				return false;
+			return true;
 		}
 
-		char temp = p.charAt(j);
-		if (temp == '?') {
-			return isMatch(s, p, i + 1, j + 1);
-		} else if (temp == '*') {
-			if (j == (p.length() - 1))
-				return true;
-			else {
-				// 查找下一个非'?'字符
-				int next_char_index = j + 1;
-				while (next_char_index < p.length() && p.charAt(next_char_index) == '?')
-					next_char_index++;
+		int len_s = s.length();
+		int len_p = p.length();
+		boolean[][] dp = new boolean[len_s + 1][len_p + 1];
+		dp[0][0] = true;
 
-				int find_index = i + (next_char_index - j - 1);
 
-				if (next_char_index == p.length()) {
-					if (find_index <= s.length())
-						return true;
-					else
-						return false;
-				} else if (p.charAt(next_char_index) == '*')
-					return isMatch(s, p, find_index, next_char_index);
-				
-				int find_end_index=next_char_index+1;
-				while(find_end_index<p.length() && p.charAt(find_end_index)!='*' && p.charAt(find_end_index)!='?')
-					find_end_index++;
-				String find_str=p.substring(next_char_index, find_end_index);
-				while (find_index < s.length()) {
-					int temp_index = s.indexOf(find_str, find_index);
-					if (temp_index == -1)
-						return false;
-					else {
-						if (isMatch(s, p, temp_index, next_char_index))
-							return true;
-						else
-						{
-							find_index = temp_index + 1;
-						}
+		for (int i = 1; i < len_p + 1; i++) {
+			dp[0][i] = true;
+			for (int j = 0; j <= i - 1; j++) {
+				if(p.charAt(j) != '*') {
+					dp[0][i] = false;
+				}
+			}
+		}
+
+		for (int y = 0; y < p.length(); y++) {
+			for (int x = 0; x < s.length(); x++) {
+				char ch_temp = p.charAt(y);
+				if (ch_temp == '?') {
+					dp[x + 1][y + 1] = dp[x][y];
+				} else if (ch_temp == '*') {
+					dp[x + 1][y + 1] = dp[x][y + 1] || dp[x + 1][y];
+				} else {
+					if (s.charAt(x) == ch_temp) {
+						dp[x + 1][y + 1] = dp[x][y];
 					}
 				}
-				return false;
 			}
-		} else {
-			if (temp == s.charAt(i))
-				return isMatch(s, p, i + 1, j + 1);
-			else
-				return false;
 		}
+		return dp[len_s][len_p];
 	}
 
 	public static void main(String[] args) {
