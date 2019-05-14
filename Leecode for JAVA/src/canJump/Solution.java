@@ -3,7 +3,8 @@ package canJump;
 /*
  * 跳跃游戏
  * AC
- * 5ms - 60.53%
+ * 2ms - 98.93%
+ * DP
  * 
  */
 public class Solution {
@@ -11,21 +12,20 @@ public class Solution {
 		if (nums == null)
 			return false;
 		int len = nums.length;
-		if(len<=1)
-			return true;
-		int[] dp = new int[len];
-		dp[0] = nums[0];
-		for (int i = 1; i < len; i++) {
-			if (dp[i - 1] >= i)
-				dp[i] = Math.max(dp[i - 1], i + nums[i]);
-			else
-				dp[i] = dp[i - 1];
+		int max_len = 0;
+		for (int i = 0; i < len; i++) {
+			if (max_len >= i) {
+				max_len = Math.max(max_len, i + nums[i]);
+				if (max_len >= (len - 1))
+					break;
+			} else
+				break;
 		}
-		return (dp[len - 1] >= (len - 1));
+		return (max_len >= (len - 1));
 	}
 
 	public static void main(String[] args) {
-		int[] test_in = { 3, 2, 1, 0, 4 };
+		int[] test_in = { 2, 3, 1, 1, 4 };
 		Solution test = new Solution();
 		System.out.println(test.canJump(test_in));
 
