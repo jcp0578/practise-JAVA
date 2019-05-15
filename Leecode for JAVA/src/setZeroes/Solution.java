@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 /*
  * 矩阵置零
- * 空间复杂度O(m + n) 
+ * 空间复杂度O(1) 
  * AC
- * 2ms - 96.92%
+ * 3ms - 75.90%
  */
 public class Solution {
 	public void setZeroes(int[][] matrix) {
@@ -19,28 +19,29 @@ public class Solution {
 		if (len_l <= 0)
 			return;
 
-		boolean[] flag = new boolean[len_r + len_l];
+		boolean flag_row = false;
+		boolean flag_col  = false;
 
 		for (int i = 0; i < len_r; i++) {
 			for (int j = 0; j < len_l; j++) {
 				if (matrix[i][j] == 0) {
-					flag[i] = true;
-					flag[len_r + j] = true;
+					if (i == 0)
+						flag_row = true;
+					else if (j == 0)
+						flag_col = true;
+					else {
+						matrix[0][j] = 0;
+						matrix[i][0] = 0;
+					}
 				}
 			}
 		}
 
-		for (int i = 0; i < len_r; i++) {
-			if (flag[i]) {
-				for (int j = 0; j < len_l; j++)
+		for (int i = len_r - 1; i >= 0; i--) {
+			for (int j = len_l - 1; j >= 0; j--) {
+				if ((i == 0 && flag_row) || (j == 0 && flag_col) || matrix[0][j] == 0 || matrix[i][0] == 0) {
 					matrix[i][j] = 0;
-			}
-		}
-
-		for (int i = len_r; i < len_r + len_l; i++) {
-			if (flag[i]) {
-				for (int j = 0; j < len_r; j++)
-					matrix[j][i - len_r] = 0;
+				}
 			}
 		}
 
@@ -48,7 +49,7 @@ public class Solution {
 	}
 
 	public static void main(String[] args) {
-		int[][] test_in = { { 1, 1, 2, 1 }, { 3, 0, 5, 2 }, { 1, 3, 1, 5 } };
+		int[][] test_in = { { 1, 1, 2, 1 }, { 0, 1, 5, 2 }, { 1, 3, 1, 5 } };
 		Solution test = new Solution();
 		test.setZeroes(test_in);
 		for (int[] t : test_in) {
