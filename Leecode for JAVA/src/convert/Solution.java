@@ -2,9 +2,9 @@ package convert;
 
 /*
  * title:Z 字形变换
- * time:108ms - 8.59%
- * AC but too slow	
- *
+ * time:14ms - 77.72%
+ * momory:40.2MB - 86.41%
+ * AC	
  */
 public class Solution {
 	public String convert(String s, int numRows) {
