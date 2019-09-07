@@ -3,7 +3,7 @@ package checkRecord;
 import java.util.Arrays;
 
 /*
- *dp[i][j]  i:index j:state
+ *state[j]  i:index j:state
  *A     0
  *L     1
  *LL    2
@@ -17,58 +17,49 @@ import java.util.Arrays;
 /*
  *  titel :  学生出勤记录 II
  *  url : https://leetcode-cn.com/problems/student-attendance-record-ii/submissions/
- *  time: 136ms - 17.24%
- *  memory: 90.4MB - 14.29%
- *  AC but too slow
+ *  time: 48ms - 79.31%
+ *  memory: 33.7MB - 100%
+ *  AC
  * 
  */
 public class Solution {
 	final long mod = 1000000000 + 7;
 
 	public int checkRecord(int n) {
-		long[][] dp = new long[n][7];
-		dp[0][0] = 1;
-		dp[0][1] = 1;
-		dp[0][2] = 0;
-		dp[0][3] = 1;
-		dp[0][4] = 0;
-		dp[0][5] = 0;
-		dp[0][6] = 0;
+		int[] state = new int[7];
+		int[] state_last = new int[7];
+		state[0] = 1;
+		state[1] = 1;
+		state[2] = 0;
+		state[3] = 1;
+		state[4] = 0;
+		state[5] = 0;
+		state[6] = 0;
 
 		for (int i = 1; i < n; i++) {
-			dp[i][0] = dp[i - 1][1] + dp[i - 1][2] + dp[i - 1][3];
-			dp[i][1] = dp[i - 1][3];
-			dp[i][2] = dp[i - 1][1];
-			dp[i][3] = dp[i - 1][1] + dp[i - 1][2] + dp[i - 1][3];
-			dp[i][4] = dp[i - 1][0] + dp[i - 1][6];
-			dp[i][5] = dp[i - 1][4];
-			dp[i][6] = dp[i - 1][0] + dp[i - 1][4] + dp[i - 1][5] + dp[i - 1][6];
-			
-			checkMod(dp[i]);
+			for (int j = 0; j < 7; j++) {
+				state_last[j] = state[j];
+			}
+			state[0] = (int) (((long) state_last[1] + state_last[2] + state_last[3]) % mod);
+			state[1] = state_last[3];
+			state[2] = state_last[1];
+			state[3] = state[0];
+			state[4] = (int) (((long) state_last[0] + state_last[6]) % mod);
+			state[5] = state_last[4];
+			state[6] = (int) (((long) state[4] + state_last[4] + state_last[5]) % mod);
+
 		}
 
 		/* out */
-		int res = 0;
+		long res = 0;
 		for (int i = 0; i < 7; i++) {
-			res += dp[n - 1][i];
-			if (res >= mod) {
-				res %= mod;
-			}
+			res += state[i];
 		}
-		return res;
-	}
-
-	private void checkMod(long[] data_temp) {
-		int len = data_temp.length;
-		for (int i = 0; i < len; i++) {
-			if (data_temp[i] >= mod) {
-				data_temp[i] %= mod;
-			}
-		}
+		return (int) (res % mod);
 	}
 
 	public static void main(String[] args) {
-		int test_in = 2;
+		int test_in = 100000;
 		Solution test = new Solution();
 		System.out.println(test.checkRecord(test_in));
 
