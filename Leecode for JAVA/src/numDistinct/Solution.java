@@ -12,13 +12,13 @@ import java.util.HashMap;
  */
 public class Solution {
 	public int numDistinct(String s, String t) {
-		if(t == null)
+		if (t == null)
 			return 1;
-		if(s == null)
+		if (s == null)
 			return 0;
 		int lenOfS = s.length();
 		int lenOfT = t.length();
-		
+
 		HashMap<Character, ArrayList<Integer>> map = new HashMap<>();
 		for (int i = 0; i < lenOfS; i++) {
 			Character temp = s.charAt(i);
@@ -30,6 +30,10 @@ public class Solution {
 				map.put(temp, addList);
 			}
 		}
+		for (int i = 0; i < lenOfT; i++) {
+			if (!map.containsKey(t.charAt(i)))
+				return 0;
+		}
 		return DFS(map, t, -1, 0);
 
 	}
@@ -39,9 +43,7 @@ public class Solution {
 		if (k == len)
 			return 1;
 		int res = 0;
-		ArrayList<Integer> listTemp = map.getOrDefault(t.charAt(k), null);
-		if(listTemp == null)
-			return 0;
+		ArrayList<Integer> listTemp = map.get(t.charAt(k));
 		for (int i = 0; i < listTemp.size(); i++) {
 			int curIndex = listTemp.get(i);
 			if (curIndex <= index) {
