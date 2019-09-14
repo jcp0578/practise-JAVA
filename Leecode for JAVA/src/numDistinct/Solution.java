@@ -6,58 +6,38 @@ import java.util.HashMap;
 /*
  * title:不同的子序列
  * url:https://leetcode-cn.com/problems/distinct-subsequences/submissions/
+ * time: 20ms - 43.77% 
+ * memory:37.9MB - 27.74%
  * 
- * TIME OUT
+ * AC but slow
+ * 
+ * DP 
+ * dp[i][j] - s[:i]中含有t[:j]的个数
+ * 转移关系  dp[i][j] = dp[i-1][j] + dp[i-1][j-1]*(s[i]==t[j])
  * 
  */
 public class Solution {
 	public int numDistinct(String s, String t) {
-		if (t == null)
-			return 1;
-		if (s == null)
-			return 0;
 		int lenOfS = s.length();
 		int lenOfT = t.length();
 
-		HashMap<Character, ArrayList<Integer>> map = new HashMap<>();
-		for (int i = 0; i < lenOfS; i++) {
-			Character temp = s.charAt(i);
-			if (map.containsKey(temp)) {
-				map.get(temp).add(i);
-			} else {
-				ArrayList<Integer> addList = new ArrayList<>();
-				addList.add(i);
-				map.put(temp, addList);
+		int[][] dp = new int[lenOfS + 1][lenOfT + 1];
+		for (int i = 0; i <= lenOfS; i++) {
+			dp[i][0] = 1;
+		}
+		for (int i = 1; i <= lenOfS; i++) {
+			for (int j = 1; j <= lenOfT; j++) {
+				dp[i][j] = dp[i - 1][j];
+				if (s.charAt(i - 1) == t.charAt(j - 1))
+					dp[i][j] += dp[i - 1][j - 1];
 			}
 		}
-		for (int i = 0; i < lenOfT; i++) {
-			if (!map.containsKey(t.charAt(i)))
-				return 0;
-		}
-		return DFS(map, t, -1, 0);
-
-	}
-
-	private int DFS(HashMap<Character, ArrayList<Integer>> map, String t, int index, int k) {
-		int len = t.length();
-		if (k == len)
-			return 1;
-		int res = 0;
-		ArrayList<Integer> listTemp = map.get(t.charAt(k));
-		for (int i = 0; i < listTemp.size(); i++) {
-			int curIndex = listTemp.get(i);
-			if (curIndex <= index) {
-				continue;
-			} else {
-				res += DFS(map, t, curIndex, k + 1);
-			}
-		}
-		return res;
+		return dp[lenOfS][lenOfT];
 	}
 
 	public static void main(String[] args) {
-		String str_in = "adbdadeecadeadeccaeaabdabdbcdabddddabcaaadbabaaedeeddeaeebcdeabcaaaeeaeeabcddcebddebeebedaecccbdcbcedbdaeaedcdebeecdaaedaacadbdccabddaddacdddc";
-		String str_in2 = "bcddceeeebecbc";
+		String str_in = "";
+		String str_in2 = "";
 		Solution test = new Solution();
 		System.out.println(test.numDistinct(str_in, str_in2));
 
