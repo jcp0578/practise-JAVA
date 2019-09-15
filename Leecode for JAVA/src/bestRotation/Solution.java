@@ -3,11 +3,11 @@ package bestRotation;
 /*
  * title:798. 得分最高的最小轮调
  * url:https:https://leetcode-cn.com/problems/smallest-rotation-with-highest-score/
- * time:  
- * memory:
+ * time:  6ms - 83.33%
+ * memory:51.7MB - 16.49%
  * 
- * Time Out
- * 
+ * AC
+ * Refer：https://leetcode-cn.com/problems/smallest-rotation-with-highest-score/solution/onde-shi-jian-fu-za-du-suan-fa-yi-ji-jie-xi-by-wan/
  * 
  */
 
@@ -16,24 +16,16 @@ public class Solution {
 		int len = A.length;
 		int[] save = new int[len];
 		for (int i = 0; i < len; i++) {
-			if (A[i] <= i) {
-				for (int j = 0; j <= (i - A[i]); j++) {
-					save[j]++;
-				}
-				for (int j = i + 1; j < len; j++) {
-					save[j]++;
-				}
-			} else {
-				for (int j = i + 1; j <= (i + len - A[i]); j++) {
-					save[j]++;
-				}
-			}
+			save[(i-A[i]+len + 1)%len] --;
 		}
-		int _max = save[0];
+		int curNum = 0;
+		int _max = curNum;
+		
 		int res = 0;
-		for (int i = 0; i < len; i++) {
-			if (save[i] > _max) {
-				_max = save[i];
+		for (int i = 1; i < len; i++) {
+			curNum += (save[i] + 1);
+			if (curNum > _max) {
+				_max = curNum;
 				res = i;
 			}
 		}
