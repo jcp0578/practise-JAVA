@@ -1,23 +1,34 @@
 package numMatchingSubseq;
 
+import java.util.HashMap;
+
 /*
  * titel:792. 匹配子序列的单词数
  * url:https://leetcode-cn.com/problems/number-of-matching-subsequences/submissions/
- * time:1698ms - 5.08%
- * memory:38.5MB - 97.22%
+ * time:41ms - 98.87%
+ * memory:38.4MB - 97.22%
  * 
- * AC but too slow
+ * add map
+ * AC
  * 
  */
 public class Solution {
 
 	public int numMatchingSubseq(String S, String[] words) {
 		int len = words.length;
-		int res = 0;
+		HashMap<String, Integer> map = new HashMap<>();
 		for (int i = 0; i < len; i++) {
 			String temp = words[i];
-			if (isSub(S, temp)) {
-				res++;
+			if (!map.containsKey(temp)) {
+				map.put(temp, 1);
+			} else {
+				map.put(temp, map.get(temp) + 1);
+			}
+		}
+		int res = 0;
+		for (String key : map.keySet()) {
+			if (isSub(S, key)) {
+				res += map.get(key);
 			}
 		}
 		return res;
